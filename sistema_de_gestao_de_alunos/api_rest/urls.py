@@ -1,10 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet
+from .views import AlunoViewSet, ProfessorViewSet, AdministradorViewSet
 
-# Crie um ViewSet para o modelo User
 router = DefaultRouter()
-router.register(r'users', UserViewSet)
+router.register(r'alunos', AlunoViewSet)
+router.register(r'professores', ProfessorViewSet)
+router.register(r'administradores', AdministradorViewSet)
 
 # URLs
 urlpatterns = [
