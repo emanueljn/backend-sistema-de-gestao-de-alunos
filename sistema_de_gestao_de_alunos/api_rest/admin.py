@@ -27,8 +27,8 @@ class HistoricoAdmin(admin.ModelAdmin):
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'cpf', 'escola', 'telefone_1', 'telefone_2')
-    search_fields = ('username', 'cpf')
+    list_display = ('full_name', 'cpf', 'escola', 'endereco', 'telefone_1', 'telefone_2')
+    search_fields = ('full_name', 'cpf')
 
 @admin.register(Administrador)
 class AdministradorAdmin(admin.ModelAdmin):

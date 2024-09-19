@@ -139,7 +139,4 @@ CORS_ALLOW_METHODS = (
     "PUT",
 )
 
-"""CORS_ALLOW_ORIGINS = [
-    'http://localhost:3000'
-]
-"""
+AUTH_USER_MODEL = 'api_rest.CustomUser'
