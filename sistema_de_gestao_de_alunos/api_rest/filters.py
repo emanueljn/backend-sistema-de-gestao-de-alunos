@@ -4,7 +4,7 @@ class AlunoFilterClass(AutoRQLFilterClass):
     MODEL = Aluno
     FILTERS = (
         {
-            'filter': 'user__full_name',
+            'filter': 'full_name',
             'search': True,
         },
     )
