@@ -4,13 +4,13 @@ from django.utils.translation import gettext_lazy as _
 
 class Endereco(models.Model):
     usuario = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='enderecos', null=True)  # Usar string para evitar dependência circular
-    logradouro = models.CharField(max_length=255)
-    numero = models.IntegerField()
-    bairro = models.CharField(max_length=8)
-    cidade = models.CharField(max_length=64)
-    uf = models.CharField(max_length=2)
-    cep = models.CharField(max_length=8)
-    complemento = models.CharField(max_length=100)
+    logradouro = models.CharField(max_length=255, null=True)
+    numero = models.IntegerField(null=True)
+    bairro = models.CharField(max_length=30, null=True)
+    cidade = models.CharField(max_length=64, null=True)
+    uf = models.CharField(max_length=2, null=True)
+    cep = models.CharField(max_length=8, null=True)
+    complemento = models.CharField(max_length=100, null=True)
     def __str__(self):
         return f'{self.logradouro}, {self.numero}, {self.bairro}, {self.cidade}, {self.complemento}'
 
@@ -49,8 +49,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     cpf = models.CharField(max_length=11, unique=True)
     escola = models.CharField(max_length=25)
     endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, null=True, blank=True)
-    telefone_1 = models.CharField(max_length=11)
-    telefone_2 = models.CharField(max_length=11)
+    telefone_1 = models.CharField(max_length=11, null=True)
+    telefone_2 = models.CharField(max_length=11, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['full_name', 'cpf']
@@ -72,6 +72,7 @@ class Professor(CustomUser):
 
 class Aluno(CustomUser):
     matricula = models.CharField(max_length=20, unique=True)
+    email = models.EmailField(unique=True, null=True)
 
 class Frequencia(models.Model):
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
