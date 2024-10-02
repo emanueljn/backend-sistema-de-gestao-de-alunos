@@ -4,13 +4,13 @@ from django.utils.translation import gettext_lazy as _
 
 class Endereco(models.Model):
     usuario = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='enderecos', null=True)  # Usar string para evitar dependência circular
-    logradouro = models.CharField(max_length=255, null=True)
-    numero = models.IntegerField(null=True)
-    bairro = models.CharField(max_length=30, null=True)
-    cidade = models.CharField(max_length=64, null=True)
-    uf = models.CharField(max_length=2, null=True)
-    cep = models.CharField(max_length=8, null=True)
-    complemento = models.CharField(max_length=100, null=True)
+    logradouro = models.CharField(max_length=255, blank=True, null=True)
+    numero = models.IntegerField(blank=True, null=True)
+    bairro = models.CharField(max_length=30, blank=True, null=True)
+    cidade = models.CharField(max_length=64, blank=True, null=True)
+    uf = models.CharField(max_length=2, blank=True, null=True)
+    cep = models.CharField(max_length=8, blank=True, null=True)
+    complemento = models.CharField(max_length=100, blank=True, null=True)
     def __str__(self):
         return f'{self.logradouro}, {self.numero}, {self.bairro}, {self.cidade}, {self.complemento}'
 
@@ -45,7 +45,7 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     full_name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, blank=True, null=True)
     cpf = models.CharField(max_length=11, unique=True)
     escola = models.CharField(max_length=25)
     endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, null=True, blank=True)
@@ -72,7 +72,6 @@ class Professor(CustomUser):
 
 class Aluno(CustomUser):
     matricula = models.CharField(max_length=20, unique=True)
-    email = models.EmailField(unique=True, null=True)
 
 class Frequencia(models.Model):
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
