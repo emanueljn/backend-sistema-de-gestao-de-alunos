@@ -48,6 +48,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, blank=True, null=True)
     cpf = models.CharField(max_length=11, unique=True)
     escola = models.CharField(max_length=25)
+    data_inscricao = models.DateTimeField(auto_now_add=True)
     endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, null=True, blank=True)
     telefone_1 = models.CharField(max_length=11, null=True)
     telefone_2 = models.CharField(max_length=11, null=True)
@@ -68,7 +69,19 @@ class Administrador(CustomUser):
     departamento = models.CharField(max_length=50)
 
 class Professor(CustomUser):
-    disciplina = models.CharField(max_length=25)
+    class DisciplinaChoices(models.TextChoices):
+        MATEMATICA = 'MT', 'Matemática'
+        PORTUGUES = 'PT', 'Português'
+        HISTORIA = 'HI', 'História'
+        GEOGRAFIA = 'GE', 'Geografia'
+        FISICA = 'FI', 'Física'
+        QUIMICA = 'QU', 'Química'
+        BIOLOGIA = 'BI', 'Biologia'
+
+    disciplina = models.CharField(
+        max_length=2,
+        choices=DisciplinaChoices.choices
+    )
 
 class Aluno(CustomUser):
     matricula = models.CharField(max_length=20, unique=True)
