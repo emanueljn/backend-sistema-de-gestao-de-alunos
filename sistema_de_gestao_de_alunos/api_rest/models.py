@@ -94,8 +94,20 @@ class Frequencia(models.Model):
         return f'Frequência de {self.aluno.user.full_name} em {self.date}'
 
 class Historico(models.Model):
+    class DisciplinaChoices(models.TextChoices):
+        MATEMATICA = 'MT', 'Matemática'
+        PORTUGUES = 'PT', 'Português'
+        HISTORIA = 'HI', 'História'
+        GEOGRAFIA = 'GE', 'Geografia'
+        FISICA = 'FI', 'Física'
+        QUIMICA = 'QU', 'Química'
+        BIOLOGIA = 'BI', 'Biologia'
+
+    disciplina = models.CharField(
+        max_length=2,
+        choices=DisciplinaChoices.choices
+    )
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
+    escola = models.CharField(max_length=25)
     periodo = models.CharField(max_length=15)
     nota = models.FloatField(max_length=4)
-    disciplina = models.CharField(max_length=25)
-    escola = models.CharField(max_length=25)
