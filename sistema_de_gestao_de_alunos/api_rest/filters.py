@@ -1,8 +1,9 @@
 from dj_rql.filter_cls import AutoRQLFilterClass
-from .models import Aluno, Professor, Administrador
+from .models import Aluno, Professor, Administrador, Historico
 
 class AlunoFilterClass(AutoRQLFilterClass):
     MODEL = Aluno
+
     FILTERS = (
         {
             'filter': 'full_name',
@@ -14,18 +15,20 @@ class AlunoFilterClass(AutoRQLFilterClass):
         }
     )
 
+class HistoricoFilterClass(AutoRQLFilterClass):
+    MODEL = Historico
+
+    FILTERS = (
+        'id',
+        'aluno.id',  # Acessa o campo `id` do modelo Aluno, via a ForeignKey 'aluno'
+    )
+
 class ProfessorFilterClass(AutoRQLFilterClass):
     MODEL = Professor
 
     FILTERS = (
-        {
-            'filter': 'full_name',
-            'search': True,
-        },
-        {
-            'filter': 'disciplina',
-            'choices': Professor.DisciplinaChoices.choices,  # adicionar as opções
-        }
+        'id',  # Filtrar por ID de Historico se necessário
+        'aluno_id',  # Filtrar pelo campo aluno_id que é o ID da ForeignKey
     )
 
 class AdministradorFilterClass(AutoRQLFilterClass):

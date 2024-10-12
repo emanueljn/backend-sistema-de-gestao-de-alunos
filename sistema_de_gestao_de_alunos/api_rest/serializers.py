@@ -41,9 +41,26 @@ class FrequenciaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class HistoricoSerializer(serializers.ModelSerializer):
+    escola = serializers.CharField(source='aluno.escola', read_only=True)
+
     class Meta:
         model = Historico
         fields = '__all__'
+
+    def create(self, validated_data):
+        # Extrai o aluno dos dados validados
+        aluno = validated_data.get('aluno')
+
+        # Preenche o campo 'escola' automaticamente com base na escola do aluno
+        historico = Historico.objects.create(
+            aluno=aluno,
+            periodo=validated_data.get('periodo'),
+            nota=validated_data.get('nota'),
+            disciplina=validated_data.get('disciplina'),
+            escola=aluno.escola  # Aqui você usa o nome da escola do aluno
+        )
+
+        return historico
 
 class AlunoSerializer(serializers.ModelSerializer):
     endereco = EnderecoSerializer(required=False, allow_null=True)  # Endereco é opcional

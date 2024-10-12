@@ -111,3 +111,6 @@ class Historico(models.Model):
     escola = models.CharField(max_length=25)
     periodo = models.CharField(max_length=15)
     nota = models.FloatField(max_length=4)
+
+    def __str__(self):
+        return f'{self.disciplina} - {self.nota}'
