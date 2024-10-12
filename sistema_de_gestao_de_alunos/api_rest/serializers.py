@@ -1,13 +1,9 @@
 from rest_framework import serializers
 from .models import Aluno, Professor, Administrador, Frequencia, Historico, CustomUser, Endereco
 
-from rest_framework import serializers
-from .models import Aluno, Professor, Administrador, Frequencia, Historico, CustomUser, Endereco
-
-from rest_framework import serializers
-from .models import Aluno, Professor, Administrador, Frequencia, Historico, CustomUser, Endereco
-
 class EnderecoSerializer(serializers.ModelSerializer):
+    numero = serializers.IntegerField(required=False, allow_null=True)
+
     class Meta:
         model = Endereco
         fields = ['id', 'logradouro', 'numero', 'bairro', 'cidade', 'uf', 'cep', 'complemento']
@@ -50,55 +46,98 @@ class HistoricoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AlunoSerializer(serializers.ModelSerializer):
-    endereco = EnderecoSerializer()
+    endereco = EnderecoSerializer(required=False, allow_null=True)  # Endereco é opcional
 
     class Meta:
         model = Aluno
-        fields = ['id', 'full_name', 'matricula', 'email', 'cpf', 'escola', 'telefone_1', 'telefone_2', 'endereco']
+        fields = ['id', 'full_name', 'matricula', 'email', 'cpf', 'escola', 'data_inscricao', 'telefone_1',
+                  'telefone_2', 'endereco']
+        read_only_fields = ['data_inscricao']
 
     def create(self, validated_data):
-        # Extrai os dados do endereço
-        endereco_data = validated_data.pop('endereco')
+        endereco_data = validated_data.pop('endereco', None)  # Remove o campo endereco se não existir
 
-        # Cria o endereço
-        endereco = Endereco.objects.create(**endereco_data)
+        if endereco_data:
+            # Se houver dados de endereço, validamos e criamos o endereço
+            endereco_serializer = EnderecoSerializer(data=endereco_data)
+            endereco_serializer.is_valid(raise_exception=True)  # Valida apenas se houver dados de endereço
+            endereco = endereco_serializer.save()
+            aluno = Aluno.objects.create(endereco=endereco, **validated_data)
+        else:
+            # Se nenhum endereço for enviado, criamos o aluno sem endereço
+            aluno = Aluno.objects.create(**validated_data)
 
-        # Cria o aluno e associa o endereço
-        aluno = Aluno.objects.create(endereco=endereco, **validated_data)  # Passa os dados restantes para Aluno
         return aluno
 
+    def validate(self, data):
+        # Validação personalizada: só valida o endereço se ele for passado
+        endereco_data = data.get('endereco')
+        if endereco_data:
+            # Validamos o serializer do endereço apenas se houver dados
+            endereco_serializer = EnderecoSerializer(data=endereco_data)
+            endereco_serializer.is_valid(raise_exception=True)
+        return data
+
 class ProfessorSerializer(serializers.ModelSerializer):
-    endereco = EnderecoSerializer()
+    endereco = EnderecoSerializer(required=False, allow_null=True)  # Endereco é opcional
 
     class Meta:
         model = Professor
-        fields = ['id', 'full_name', 'disciplina', 'email', 'cpf', 'escola', 'telefone_1', 'telefone_2', 'endereco']
+        fields = ['id', 'full_name', 'disciplina', 'email', 'cpf', 'escola', 'data_inscricao', 'telefone_1',
+                  'telefone_2', 'endereco']
 
     def create(self, validated_data):
-        # Extrai os dados do endereço
-        endereco_data = validated_data.pop('endereco')
+        endereco_data = validated_data.pop('endereco', None)  # Remove o campo endereco se não existir
 
-        # Cria o endereço
-        endereco = Endereco.objects.create(**endereco_data)
+        if endereco_data:
+            # Se houver dados de endereço, validamos e criamos o endereço
+            endereco_serializer = EnderecoSerializer(data=endereco_data)
+            endereco_serializer.is_valid(raise_exception=True)  # Valida apenas se houver dados de endereço
+            endereco = endereco_serializer.save()
+            professor = Professor.objects.create(endereco=endereco, **validated_data)
+        else:
+            # Se nenhum endereço for enviado, criamos o professor sem endereço
+            professor = Professor.objects.create(**validated_data)
 
-        # Cria o professor e associa o endereço
-        professor = Professor.objects.create(endereco=endereco, **validated_data)
         return professor
 
+    def validate(self, data):
+        # Validação personalizada: só valida o endereço se ele for passado
+        endereco_data = data.get('endereco')
+        if endereco_data:
+            # Validamos o serializer do endereço apenas se houver dados
+            endereco_serializer = EnderecoSerializer(data=endereco_data)
+            endereco_serializer.is_valid(raise_exception=True)
+        return data
+
 class AdministradorSerializer(serializers.ModelSerializer):
-    endereco = EnderecoSerializer()
+    endereco = EnderecoSerializer(required=False, allow_null=True)  # Endereco é opcional
 
     class Meta:
         model = Administrador
-        fields = ['id', 'full_name', 'departamento', 'email', 'cpf', 'escola', 'telefone_1', 'telefone_2', 'endereco']
+        fields = ['id', 'full_name', 'departamento', 'email', 'cpf', 'escola', 'data_inscricao', 'telefone_1',
+                  'telefone_2', 'endereco']
 
     def create(self, validated_data):
-        # Extrai os dados do endereço
-        endereco_data = validated_data.pop('endereco')
+        endereco_data = validated_data.pop('endereco', None)  # Remove o campo endereco se não existir
 
-        # Cria o endereço
-        endereco = Endereco.objects.create(**endereco_data)
+        if endereco_data:
+            # Se houver dados de endereço, validamos e criamos o endereço
+            endereco_serializer = EnderecoSerializer(data=endereco_data)
+            endereco_serializer.is_valid(raise_exception=True)  # Valida apenas se houver dados de endereço
+            endereco = endereco_serializer.save()
+            administrador = Administrador.objects.create(endereco=endereco, **validated_data)
+        else:
+            # Se nenhum endereço for enviado, criamos o administrador sem endereço
+            administrador = Administrador.objects.create(**validated_data)
 
-        # Cria o administrador e associa o endereço
-        administrador = Administrador.objects.create(endereco=endereco, **validated_data)
         return administrador
+
+    def validate(self, data):
+        # Validação personalizada: só valida o endereço se ele for passado
+        endereco_data = data.get('endereco')
+        if endereco_data:
+            # Validamos o serializer do endereço apenas se houver dados
+            endereco_serializer = EnderecoSerializer(data=endereco_data)
+            endereco_serializer.is_valid(raise_exception=True)
+        return data
