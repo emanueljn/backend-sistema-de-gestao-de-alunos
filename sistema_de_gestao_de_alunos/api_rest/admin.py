@@ -26,7 +26,7 @@ class FrequenciaAdmin(admin.ModelAdmin):
 
 @admin.register(Historico)
 class HistoricoAdmin(admin.ModelAdmin):
-    list_display = ('periodo', 'nota', 'disciplina', 'escola')
+    list_display = ('periodo', 'nota1','nota2','nota3','nota4','nota_final', 'disciplina', 'escola')
     search_fields = ('periodo', 'disciplina')
 
 @admin.register(Administrador)

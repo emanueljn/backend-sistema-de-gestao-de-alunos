@@ -45,13 +45,13 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     full_name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True, blank=True, null=True)
+    email = models.EmailField(unique=True, null=True, blank=True)
     cpf = models.CharField(max_length=11, unique=True)
     escola = models.CharField(max_length=25)
     data_inscricao = models.DateTimeField(auto_now_add=True)
     endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, null=True, blank=True)
-    telefone_1 = models.CharField(max_length=11, null=True)
-    telefone_2 = models.CharField(max_length=11, null=True)
+    telefone_1 = models.CharField(max_length=11, null=True, blank=True)
+    telefone_2 = models.CharField(max_length=11, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['full_name', 'cpf']
@@ -103,14 +103,18 @@ class Historico(models.Model):
         QUIMICA = 'QU', 'Química'
         BIOLOGIA = 'BI', 'Biologia'
 
+    aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
+    escola = models.CharField(max_length=25)
+    periodo = models.CharField(max_length=15)
     disciplina = models.CharField(
         max_length=2,
         choices=DisciplinaChoices.choices
     )
-    aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
-    escola = models.CharField(max_length=25)
-    periodo = models.CharField(max_length=15)
-    nota = models.FloatField(max_length=4)
+    nota1 = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
+    nota2 = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
+    nota3 = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
+    nota4 = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
+    nota_final = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.disciplina} - {self.nota}'
+        return f'{self.disciplina} - Nota Final: {self.nota_final}'

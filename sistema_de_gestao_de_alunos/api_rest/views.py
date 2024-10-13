@@ -21,8 +21,8 @@ class HistoricoViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         aluno_id = self.request.query_params.get('aluno_id', None)
 
+        # Filtra por aluno_id, se presente
         if aluno_id is not None:
-            # Aplica o filtro para 'aluno_id'
             queryset = queryset.filter(Q(aluno_id=aluno_id))
 
         return queryset

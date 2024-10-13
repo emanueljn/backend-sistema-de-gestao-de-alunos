@@ -48,19 +48,38 @@ class HistoricoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        # Extrai o aluno dos dados validados
         aluno = validated_data.get('aluno')
+        periodo = validated_data.get('periodo')
+        disciplina = validated_data.get('disciplina')
 
-        # Preenche o campo 'escola' automaticamente com base na escola do aluno
-        historico = Historico.objects.create(
+        # Verifica se já existe um registro para o aluno, período e disciplina
+        historico_existente = Historico.objects.filter(
             aluno=aluno,
-            periodo=validated_data.get('periodo'),
-            nota=validated_data.get('nota'),
-            disciplina=validated_data.get('disciplina'),
-            escola=aluno.escola  # Aqui você usa o nome da escola do aluno
-        )
+            periodo=periodo,
+            disciplina=disciplina
+        ).first()
 
-        return historico
+        if historico_existente: # Se já existir, atualiza as notas
+            historico_existente.nota1 = validated_data.get('nota1', historico_existente.nota1)
+            historico_existente.nota2 = validated_data.get('nota2', historico_existente.nota2)
+            historico_existente.nota3 = validated_data.get('nota3', historico_existente.nota3)
+            historico_existente.nota4 = validated_data.get('nota4', historico_existente.nota4)
+            historico_existente.nota_final = validated_data.get('nota_final', historico_existente.nota_final)
+            historico_existente.save()
+            return historico_existente
+        else: # Se não existir, cria um novo registro
+            historico = Historico.objects.create(
+                aluno=aluno,
+                periodo=periodo,
+                disciplina=disciplina,
+                nota1=validated_data.get('nota1'),
+                nota2=validated_data.get('nota2'),
+                nota3=validated_data.get('nota3'),
+                nota4=validated_data.get('nota4'),
+                nota_final=validated_data.get('nota_final'),
+                escola=aluno.escola
+            )
+            return historico
 
 class AlunoSerializer(serializers.ModelSerializer):
     endereco = EnderecoSerializer(required=False, allow_null=True)  # Endereco é opcional
