@@ -4,8 +4,10 @@ from .filters import AlunoFilterClass, ProfessorFilterClass, AdministradorFilter
 from .models import Aluno, Professor, Administrador, Historico
 from .serializers import AlunoSerializer, ProfessorSerializer, AdministradorSerializer, HistoricoSerializer
 from django.db.models import Q
+from rest_framework.permissions import IsAuthenticated
 
 class AlunoViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
     queryset = Aluno.objects.all()
     serializer_class = AlunoSerializer
     filter_backends = [RQLFilterBackend]
