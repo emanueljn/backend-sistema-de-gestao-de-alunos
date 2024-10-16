@@ -8,9 +8,6 @@ venv/
 __pycache__/
 *.py[cod]
 
-# Banco de dados local
-db.sqlite3
-
 # Variáveis de ambiente
 .env
 
