@@ -85,6 +85,7 @@ class Professor(CustomUser):
 
 class Aluno(CustomUser):
     matricula = models.CharField(max_length=20, unique=True)
+    cadastrado_no_ensino_medido = models.BooleanField(default=False)
 
 class Frequencia(models.Model):
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)

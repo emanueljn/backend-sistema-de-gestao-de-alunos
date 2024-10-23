@@ -15,6 +15,7 @@ class EnderecoInline(admin.TabularInline):
 
 @admin.register(Aluno)
 class AlunoAdmin(admin.ModelAdmin):
+    exclude = ('password',)
     list_display = ('full_name', 'matricula', 'email', 'cpf', 'escola', 'telefone_1', 'telefone_2')
     inlines = [FrequenciaInline, HistoricoInline, EnderecoInline]
     search_fields = ('full_name', 'matricula')
