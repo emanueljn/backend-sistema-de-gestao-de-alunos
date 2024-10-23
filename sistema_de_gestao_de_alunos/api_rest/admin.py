@@ -15,10 +15,10 @@ class EnderecoInline(admin.TabularInline):
 
 @admin.register(Aluno)
 class AlunoAdmin(admin.ModelAdmin):
-    exclude = ('password',)
-    list_display = ('full_name', 'matricula', 'email', 'cpf', 'escola', 'telefone_1', 'telefone_2')
+    list_display = ('full_name', 'matricula', 'email', 'cpf', 'escola', 'telefone_1', 'telefone_2', 'cadastrado_no_ensino_medido')
     inlines = [FrequenciaInline, HistoricoInline, EnderecoInline]
     search_fields = ('full_name', 'matricula')
+    exclude = ('password',"endereco",)
 
 @admin.register(Frequencia)
 class FrequenciaAdmin(admin.ModelAdmin):
@@ -35,9 +35,11 @@ class AdministradorAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'email', 'cpf', 'escola', 'telefone_1', 'telefone_2')
     search_fields = ('full_name',)
     inlines = [EnderecoInline]
+    exclude = ("endereco",)
 
 @admin.register(Professor)
 class ProfessorAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'email', 'cpf', 'escola', 'telefone_1', 'telefone_2')
     search_fields = ('full_name', 'disciplina')
     inlines = [EnderecoInline]
+    exclude = ("endereco",)
