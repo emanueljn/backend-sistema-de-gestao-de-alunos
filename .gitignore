@@ -6,6 +6,7 @@ venv/
 
 # Arquivos de cache Python
 __pycache__/
+sistema_de_gestao_de_alunos/sistema_de_gestao_de_alunos/__pycache__/
 *.py[cod]
 
 # Variáveis de ambiente
