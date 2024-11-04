@@ -38,7 +38,7 @@ MIDDLEWARE = [
 
 ]
 
-ROOT_URLCONF = 'sistema_de_gestao_de_alunos.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -56,7 +56,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'sistema_de_gestao_de_alunos.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 
