@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import pymysql
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,7 +41,7 @@ MIDDLEWARE = [
 
 ]
 
-ROOT_URLCONF = 'sistema_de_gestao_de_alunos.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -58,10 +59,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'sistema_de_gestao_de_alunos.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
+
+# Configura o django para utilizar a biblioteca PyMySQL
+pymysql.install_as_MySQLdb()
 
 DATABASES = {
     'default': {
